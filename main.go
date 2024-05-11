@@ -22,4 +22,10 @@ func main() {
 	fmt.Printf("Port: %s\n", env.Environment)
 	fmt.Printf("Port: %d\n", env.HttpPort)
 
+	db, err := config.NewDatabase(env.DatabaseURL)
+	if err != nil {
+		log.Error().Stack().Err(err).Msg("Database migration fail")
+	}
+	log.Info().Msg(db.GetDB().Name())
+
 }

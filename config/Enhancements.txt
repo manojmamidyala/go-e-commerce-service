@@ -1,0 +1,3 @@
+1. Interface consumer side or producer side like IDatabase
+2. WithTransaction on commit error rollback
+3. database.go WithTransaction
