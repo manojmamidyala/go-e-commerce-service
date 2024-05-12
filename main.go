@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"mami/e-commerce/config"
+	httpServer "mami/e-commerce/server/http"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -27,5 +28,10 @@ func main() {
 		log.Error().Stack().Err(err).Msg("Database migration fail")
 	}
 	log.Info().Msg(db.GetDB().Name())
+
+	httpSvr := httpServer.NewServer(db)
+	if err = httpSvr.Run(); err != nil {
+		log.Error().Stack().Err(err)
+	}
 
 }

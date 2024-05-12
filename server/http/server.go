@@ -1,11 +1,11 @@
-package config
+package http
 
 import (
 	"fmt"
 	"log"
-	"net/http"
 
-	responsedto "mami/e-commerce/responseDto"
+	"mami/e-commerce/config"
+	healthHttp "mami/e-commerce/health/http"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -14,14 +14,14 @@ import (
 
 type Server struct {
 	engine *gin.Engine
-	cfg    *envConfigs
-	db     IDatabase
+	cfg    *config.EnvConfigs
+	db     config.IDatabase
 }
 
-func NewServer(db IDatabase) *Server {
+func NewServer(db config.IDatabase) *Server {
 	return &Server{
 		engine: gin.Default(),
-		cfg:    GetConfig(),
+		cfg:    config.GetConfig(),
 		db:     db,
 	}
 }
@@ -32,7 +32,7 @@ func (s Server) GetEngine() *gin.Engine {
 
 func (s Server) Run() error {
 	_ = s.engine.SetTrustedProxies(nil)
-	if s.cfg.Environment == ProductionEnv {
+	if s.cfg.Environment == config.ProductionEnv {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
@@ -41,10 +41,6 @@ func (s Server) Run() error {
 	}
 
 	s.engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	s.engine.GET("/health", func(c *gin.Context) {
-		responsedto.JSON(c, http.StatusOK, nil)
-		return
-	})
 
 	log.Printf("HTTP server is listening on PORT: %v", s.cfg.HttpPort)
 	if err := s.engine.Run(fmt.Sprintf(":%d", s.cfg.HttpPort)); err != nil {
@@ -56,5 +52,6 @@ func (s Server) Run() error {
 
 func (s Server) MapRoutes() error {
 	v1 := s.engine.Group("/api/v1")
+	healthHttp.Routes(v1, s.db)
 	return nil
 }

@@ -8,7 +8,7 @@ import (
 
 const ProductionEnv = "production"
 
-type envConfigs struct {
+type EnvConfigs struct {
 	Environment   string `mapstructure:"ENVIRONMENT"`
 	HttpPort      int    `mapstructure:"HTTP_PORT"`
 	AuthSecret    string `mapstructure:"AUTH_SECRET"`
@@ -18,10 +18,10 @@ type envConfigs struct {
 	RedisDB       string `mapstructure:"REDIS_DB"`
 }
 
-var appEnvVariables envConfigs
+var appEnvVariables EnvConfigs
 
 // Call to load the variables from env
-func LoadEnvVariables() *envConfigs {
+func LoadEnvVariables() *EnvConfigs {
 	// Tell viper the path/location of your env file. If it is root just add "."
 	viper.AddConfigPath("./config/")
 
@@ -44,6 +44,6 @@ func LoadEnvVariables() *envConfigs {
 	return &appEnvVariables
 }
 
-func GetConfig() *envConfigs {
+func GetConfig() *EnvConfigs {
 	return &appEnvVariables
 }
