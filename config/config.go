@@ -6,6 +6,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+const ProductionEnv = "production"
+
 type envConfigs struct {
 	Environment   string `mapstructure:"ENVIRONMENT"`
 	HttpPort      int    `mapstructure:"HTTP_PORT"`
