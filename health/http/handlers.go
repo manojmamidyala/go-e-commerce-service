@@ -1,7 +1,7 @@
 package http
 
 import (
-	"log"
+	"mami/e-commerce/commons/logger"
 	"mami/e-commerce/health/service"
 	responsedto "mami/e-commerce/responseDto"
 	"net/http"
@@ -22,7 +22,7 @@ func NewHealthHandler(service service.IHealthService) *HealthHandler {
 func (h *HealthHandler) Check(c *gin.Context) {
 	status, err := h.service.Check(c)
 	if err != nil {
-		log.Fatalf("Health check failed with error %v", err)
+		logger.Fatalf("Health check failed with error %v", err)
 		responsedto.Error(c, http.StatusInternalServerError, err, "DOWN")
 		return
 	}

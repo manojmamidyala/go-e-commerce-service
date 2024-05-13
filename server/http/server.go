@@ -2,8 +2,8 @@ package http
 
 import (
 	"fmt"
-	"log"
 
+	"mami/e-commerce/commons/logger"
 	"mami/e-commerce/config"
 	healthHttp "mami/e-commerce/health/http"
 
@@ -37,14 +37,14 @@ func (s Server) Run() error {
 	}
 
 	if err := s.MapRoutes(); err != nil {
-		log.Fatalf("MapRoutes Error: %v", err)
+		logger.Fatalf("MapRoutes Error: %v", err)
 	}
 
 	s.engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	log.Printf("HTTP server is listening on PORT: %v", s.cfg.HttpPort)
+	logger.Infof("HTTP server is listening on PORT: %v", s.cfg.HttpPort)
 	if err := s.engine.Run(fmt.Sprintf(":%d", s.cfg.HttpPort)); err != nil {
-		log.Fatalf("Running HTTP server: %v", err)
+		logger.Fatalf("Running HTTP server: %v", err)
 	}
 
 	return nil

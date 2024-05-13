@@ -1,7 +1,7 @@
 package config
 
 import (
-	"log"
+	"mami/e-commerce/commons/logger"
 
 	"github.com/spf13/viper"
 )
@@ -33,12 +33,12 @@ func LoadEnvVariables() *EnvConfigs {
 
 	// Viper reads all the variables from env file and log error if any found
 	if err := viper.ReadInConfig(); err != nil {
-		log.Fatal("Error reading env file", err)
+		logger.Fatal("Error reading env file", err)
 	}
 
 	// Viper unmarshals the loaded env varialbes into the struct
 	if err := viper.Unmarshal(&appEnvVariables); err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	return &appEnvVariables

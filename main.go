@@ -1,37 +1,30 @@
 package main
 
 import (
-	"fmt"
-
+	"mami/e-commerce/commons/logger"
 	"mami/e-commerce/config"
 	httpServer "mami/e-commerce/server/http"
-
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 )
 
 func main() {
 
 	// load env variables just once in here so can be use in any other place
 	env := config.LoadEnvVariables()
-	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-	zerolog.SetGlobalLevel(zerolog.DebugLevel)
-
-	log.Info().Msg(env.Environment)
+	logger.Initialize(env.Environment)
 
 	// print the env variables
-	fmt.Printf("Port: %s\n", env.Environment)
-	fmt.Printf("Port: %d\n", env.HttpPort)
+	logger.Infof("Port: %s\n", env.Environment)
+	logger.Infof("Port: %d\n", env.HttpPort)
 
 	db, err := config.NewDatabase(env.DatabaseURL)
 	if err != nil {
-		log.Error().Stack().Err(err).Msg("Database migration fail")
+		logger.Error("Database migration fail", err)
 	}
-	log.Info().Msg(db.GetDB().Name())
+	logger.Info(db.GetDB().Name())
 
 	httpSvr := httpServer.NewServer(db)
 	if err = httpSvr.Run(); err != nil {
-		log.Error().Stack().Err(err)
+		logger.Error(err)
 	}
 
 }
