@@ -4,6 +4,8 @@ import (
 	"mami/e-commerce/commons/logger"
 	"mami/e-commerce/config"
 	httpServer "mami/e-commerce/server/http"
+
+	"github.com/go-playground/validator/v10"
 )
 
 func main() {
@@ -22,7 +24,9 @@ func main() {
 	}
 	logger.Info(db.GetDB().Name())
 
-	httpSvr := httpServer.NewServer(db)
+	validator := validator.New(validator.WithRequiredStructEnabled())
+
+	httpSvr := httpServer.NewServer(db, validator)
 	if err = httpSvr.Run(); err != nil {
 		logger.Error(err)
 	}

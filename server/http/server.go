@@ -8,21 +8,24 @@ import (
 	healthHttp "mami/e-commerce/health/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type Server struct {
-	engine *gin.Engine
-	cfg    *config.EnvConfigs
-	db     config.IDatabase
+	engine    *gin.Engine
+	cfg       *config.EnvConfigs
+	db        config.IDatabase
+	validator *validator.Validate
 }
 
-func NewServer(db config.IDatabase) *Server {
+func NewServer(db config.IDatabase, validator *validator.Validate) *Server {
 	return &Server{
-		engine: gin.Default(),
-		cfg:    config.GetConfig(),
-		db:     db,
+		engine:    gin.Default(),
+		cfg:       config.GetConfig(),
+		db:        db,
+		validator: validator,
 	}
 }
 
