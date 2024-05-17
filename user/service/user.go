@@ -67,7 +67,7 @@ func (s *UserService) Register(ctx context.Context, req *dto.RegisterReq) (*mode
 	}
 
 	var user model.User
-	utils.Copy(&user, &req)
+	utils.Copy(&req, &user)
 	err := s.repo.Create(ctx, &user)
 	if err != nil {
 		logger.Errorf("Register.Create fail, email %s, error: %s", req.Email, err)

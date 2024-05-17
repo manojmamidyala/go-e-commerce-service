@@ -6,6 +6,7 @@ import (
 	"mami/e-commerce/commons/logger"
 	"mami/e-commerce/config"
 	healthHttp "mami/e-commerce/health/http"
+	userHttp "mami/e-commerce/user/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -56,5 +57,6 @@ func (s Server) Run() error {
 func (s Server) MapRoutes() error {
 	v1 := s.engine.Group("/api/v1")
 	healthHttp.Routes(v1, s.db)
+	userHttp.Routes(v1, s.db, *s.validator)
 	return nil
 }

@@ -4,6 +4,7 @@ import (
 	"mami/e-commerce/commons/logger"
 	"mami/e-commerce/config"
 	httpServer "mami/e-commerce/server/http"
+	userModel "mami/e-commerce/user/model"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -23,6 +24,11 @@ func main() {
 		logger.Error("Database migration fail", err)
 	}
 	logger.Info(db.GetDB().Name())
+
+	err = db.AutoMigrate(&userModel.User{})
+	if err != nil {
+		logger.Fatal("Database migration fail", err)
+	}
 
 	validator := validator.New(validator.WithRequiredStructEnabled())
 

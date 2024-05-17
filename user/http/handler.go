@@ -60,7 +60,7 @@ func (h *UserHandler) Register(c *gin.Context) {
 	}
 
 	var res dto.RegisterRes
-	utils.Copy(&res.User, &user)
+	utils.Copy(&user, &res.User)
 	responsedto.JSON(c, http.StatusOK, res)
 }
 
@@ -79,7 +79,7 @@ func (h *UserHandler) GetMe(c *gin.Context) {
 	}
 
 	var res dto.User
-	utils.Copy(&res, &user)
+	utils.Copy(&user, &res)
 	responsedto.JSON(c, http.StatusOK, res)
 }
 
